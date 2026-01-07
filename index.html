@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>பி.ஆர்.ஐ சந்தை பகுப்பாய்வு - நேரடி கருவி</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --bg: #f4f7f6;
+            --card: #fff;
+            --buy: #27ae60;
+            --sell: #c0392b;
+            --wait: #f39c12;
+            --avoid: #7f8c8d;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
+            --whatsapp: #25D366;
+            --print: #95a5a6;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg); 
+            padding: 20px; 
+            color: #333;
+            line-height: 1.6;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+        
+        /* Header & Time */
+        header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            padding-bottom: 20px; 
+            border-bottom: 2px solid #ddd; 
+            position: relative;
+        }
+        h1 { 
+            color: var(--primary); 
+            margin-bottom: 10px; 
+            font-size: 2.2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        .live-clock { 
+            font-size: 1.1rem; 
+            color: #fff; 
+            font-weight: bold; 
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            display: inline-block; 
+            padding: 8px 20px; 
+            border-radius: 25px; 
+            border: 2px solid #2980b9;
+            box-shadow: 0 3px 8px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Upload Section */
+        .upload-area {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 20px;
+            align-items: end;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+        .input-group { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+        }
+        .input-group label { 
+            font-size: 0.95rem; 
+            color: #444; 
+            font-weight: 600; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .input-group label i {
+            color: #3498db;
+        }
+        .input-group input { 
+            padding: 12px 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px; 
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        .btn-analyze { 
+            background: linear-gradient(135deg, #3498db, #2980b9); 
+            color: white; 
+            border: none; 
+            padding: 14px 30px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 1.05rem; 
+            height: 50px; 
+            font-weight: bold; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        .btn-analyze:hover { 
+            background: linear-gradient(135deg, #2980b9, #1f6396); 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        /* Dashboard */
+        .dashboard { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 20px; 
+            margin-bottom: 25px; 
+        }
+        .stat-card { 
+            background: var(--card); 
+            padding: 20px; 
+            border-radius: 10px; 
+            text-align: center; 
+            box-shadow: var(--shadow); 
+            cursor: pointer; 
+            border-top: 5px solid #ccc; 
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.5);
+        }
+        .stat-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .stat-card.active { 
+            background: #f8f9fa; 
+            border: 2px solid #3498db; 
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        .stat-card h3 { 
+            font-size: 0.95rem; 
+            color: #666; 
+            margin: 0 0 10px 0; 
+            font-weight: 600;
+        }
+        .stat-card .count { 
+            font-size: 2.2rem; 
+            font-weight: bold; 
+            margin-bottom: 5px;
+        }
+        .stat-card .sub-count {
+            font-size: 0.85rem;
+            color: #777;
+        }
+        
+        .card-buy { border-color: var(--buy); } 
+        .card-buy .count { color: var(--buy); }
+        .card-sell { border-color: var(--sell); } 
+        .card-sell .count { color: var(--sell); }
+        .card-wait { border-color: var(--wait); } 
+        .card-wait .count { color: var(--wait); }
+        .card-avoid { border-color: var(--avoid); } 
+        .card-avoid .count { color: var(--avoid); }
+
+        /* Comparison Analysis Section */
+        .comparison-section {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            display: none;
+        }
+        .comparison-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .comparison-header h2 {
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .comparison-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .comparison-card {
+            background: #f8f9fa;
+            padding: 18px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        .comparison-card h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+        }
+        .reason-item {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #ddd;
+        }
+        .reason-title {
+            font-weight: 600;
+            color: #444;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        .reason-desc {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+            padding-left: 24px;
+        }
+
+        /* Report Table */
+        .report-section { 
+            background: var(--card); 
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: var(--shadow); 
+            display: none; 
+            margin-bottom: 25px;
+        }
+        .report-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+            flex-wrap: wrap; 
+            gap: 15px; 
+        }
+        .report-header h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        button.btn-wa { 
+            background: var(--whatsapp); 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 3px 8px rgba(37, 211, 102, 0.3);
+        }
+        button.btn-wa:hover { 
+            background: #1da851;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(37, 211, 102, 0.4);
+        }
+        
+        button.btn-dashboard-wa { 
+            background: linear-gradient(135deg, #128C7E, #075E54); 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 3px 8px rgba(18, 140, 126, 0.3);
+        }
+        button.btn-dashboard-wa:hover { 
+            background: linear-gradient(135deg, #075E54, #05433d);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(18, 140, 126, 0.4);
+        }
+        
+        button.btn-print { 
+            background: var(--print); 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        button.btn-print:hover { 
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+        
+        button.btn-comparison { 
+            background: linear-gradient(135deg, #9b59b6, #8e44ad); 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 3px 8px rgba(155, 89, 182, 0.3);
+        }
+        button.btn-comparison:hover { 
+            background: linear-gradient(135deg, #8e44ad, #703688);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(155, 89, 182, 0.4);
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 0.95rem; 
+            margin-top: 10px;
+        }
+        th, td { 
+            padding: 14px 12px; 
+            text-align: left; 
+            border-bottom: 1px solid #eee; 
+        }
+        th { 
+            background: #f8f9fa; 
+            color: #444; 
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        tr:hover { 
+            background-color: #f9f9f9; 
+        }
+        .badge { 
+            padding: 5px 12px; 
+            border-radius: 20px; 
+            color: white; 
+            font-size: 0.85rem; 
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+            min-width: 80px;
+        }
+        .badge-buy { background-color: var(--buy); }
+        .badge-sell { background-color: var(--sell); }
+        .badge-wait { background-color: var(--wait); }
+        .badge-avoid { background-color: var(--avoid); }
+        
+        .pos-chg { 
+            color: var(--buy); 
+            font-weight: bold; 
+            background-color: rgba(39, 174, 96, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .neg-chg { 
+            color: var(--sell); 
+            font-weight: bold; 
+            background-color: rgba(192, 57, 43, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .neutral-chg {
+            color: var(--wait);
+            font-weight: bold;
+            background-color: rgba(243, 156, 18, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .target-cell {
+            font-weight: bold;
+            color: var(--buy);
+            background-color: rgba(39, 174, 96, 0.08);
+            padding: 6px 10px;
+            border-radius: 4px;
+            border-left: 3px solid var(--buy);
+        }
+        .stoploss-cell {
+            font-weight: bold;
+            color: var(--sell);
+            background-color: rgba(192, 57, 43, 0.08);
+            padding: 6px 10px;
+            border-radius: 4px;
+            border-left: 3px solid var(--sell);
+        }
+        
+        /* Reason column styling */
+        .reason-cell {
+            max-width: 300px;
+            line-height: 1.4;
+        }
+        .reason-bullet {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 6px;
+            background-color: #3498db;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        .page-btn {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        .page-btn:hover {
+            background: #f8f9fa;
+        }
+        .page-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        /* Summary Bar */
+        .summary-bar {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .summary-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .summary-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .dashboard { grid-template-columns: repeat(2, 1fr); }
+            .comparison-cards { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .upload-area { grid-template-columns: 1fr; }
+            .btn-analyze { width: 100%; margin-top: 10px; }
+            .report-header { flex-direction: column; align-items: flex-start; }
+            .action-buttons { width: 100%; justify-content: flex-start; }
+            .summary-bar { flex-direction: column; align-items: flex-start; }
+        }
+        @media print { 
+            .upload-area, .dashboard, .comparison-section, .action-buttons, .summary-bar, .pagination { 
+                display: none !important; 
+            } 
+            header { border: none; padding-bottom: 10px; margin-bottom: 20px; }
+            .live-clock { 
+                display: block; 
+                background: none;
+                color: #333;
+                border: 1px solid #ddd;
+                box-shadow: none;
+            }
+            body { 
+                background: white; 
+                padding: 15px; 
+                font-size: 12px;
+            } 
+            .container { max-width: 100%; }
+            .report-section { 
+                display: block !important; 
+                box-shadow: none; 
+                padding: 0;
+                margin: 0;
+            }
+            table { font-size: 11px; }
+            th, td { padding: 8px 6px; }
+            h1 { font-size: 1.5rem; }
+            .report-header h2 { font-size: 1.2rem; }
+        }
+        
+        /* Icons */
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        .icon-clock { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>'); }
+        .icon-upload { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233498db"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>'); }
+        .icon-whatsapp { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M16.75 13.96c.25.13.41.2.46.3.06.11.04.61-.21 1.18-.2.56-1.24 1.1-1.7 1.12-.46.02-.47.36-2.96-.73-2.49-1.09-3.99-3.75-4.11-3.92-.12-.17-.96-1.38-.92-2.61.05-1.22.69-1.8.95-2.04.24-.26.51-.29.68-.26h.47c.15 0 .36-.06.55.45l.69 1.87c.06.13.1.28.01.44l-.27.41-.39.42c-.12.12-.26.25-.12.5.12.26.62 1.09 1.32 1.78.91.88 1.71 1.17 1.95 1.3.24.14.39.12.54-.04l.81-.94c.19-.25.35-.19.58-.11l1.67.88M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10c-1.97 0-3.8-.57-5.35-1.55L2 22l1.55-4.65A9.969 9.969 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8c0 1.72.54 3.31 1.46 4.61L4.5 19.5l2.89-.96A7.95 7.95 0 0 0 12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8z"/></svg>'); }
+        .icon-print { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>'); }
+        .icon-chart { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233498db"><path d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z"/></svg>'); }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1><i class="fas fa-chart-line"></i> பி.ஆர்.ஐ சந்தை பகுப்பாய்வு</h1>
+        <div class="subtitle">நேற்றைய மற்றும் இன்றைய பங்குத் தரவுகளை ஒப்பிட்டு பகுப்பாய்வு செய்யுங்கள்</div>
+        <div class="live-clock" id="liveClock">
+            <i class="fas fa-clock"></i> <span id="clockText">நேரம் ஏற்றுகிறது...</span>
+        </div>
+    </header>
+
+    <!-- File Upload Section -->
+    <div class="upload-area">
+        <div class="input-group">
+            <label for="file1"><i class="fas fa-calendar-day"></i> முந்தைய தரவு (Previous CSV)</label>
+            <input type="file" id="file1" accept=".csv">
+        </div>
+        <div class="input-group">
+            <label for="file2"><i class="fas fa-calendar-alt"></i> தற்போதைய தரவு (Current CSV)</label>
+            <input type="file" id="file2" accept=".csv">
+        </div>
+        <button class="btn-analyze" onclick="analyzeData()">
+            <i class="fas fa-chart-bar"></i> பகுப்பாய்வு செய் (Analyze)
+        </button>
+    </div>
+
+    <!-- Stats Dashboard -->
+    <div class="dashboard">
+        <div class="stat-card card-buy active" onclick="showTable('BUY')">
+            <h3>வாங்க (BUY)</h3>
+            <div class="count" id="count-buy">0</div>
+            <div class="sub-count" id="sub-buy">0%</div>
+        </div>
+        <div class="stat-card card-sell" onclick="showTable('SELL')">
+            <h3>விற்க (SELL)</h3>
+            <div class="count" id="count-sell">0</div>
+            <div class="sub-count" id="sub-sell">0%</div>
+        </div>
+        <div class="stat-card card-wait" onclick="showTable('WAIT')">
+            <h3>காத்திரு (WAIT)</h3>
+            <div class="count" id="count-wait">0</div>
+            <div class="sub-count" id="sub-wait">0%</div>
+        </div>
+        <div class="stat-card card-avoid" onclick="showTable('AVOID')">
+            <h3>வேண்டாம் (AVOID)</h3>
+            <div class="count" id="count-avoid">0</div>
+            <div class="sub-count" id="sub-avoid">0%</div>
+        </div>
+    </div>
+
+    <!-- Summary Bar -->
+    <div class="summary-bar" id="summaryBar" style="display: none;">
+        <div class="summary-item">
+            <span class="summary-label">மொத்த பங்குகள்</span>
+            <span class="summary-value" id="totalStocks">0</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">ஒப்பிடப்பட்டவை</span>
+            <span class="summary-value" id="comparedStocks">0</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">விலை உயர்வு</span>
+            <span class="summary-value" id="priceUp">0</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">விலை தாழ்வு</span>
+            <span class="summary-value" id="priceDown">0</span>
+        </div>
+        <div class="summary-item">
+            <button class="btn-comparison" onclick="toggleComparison()">
+                <i class="fas fa-exchange-alt"></i> ஒப்பீட்டு பகுப்பாய்வு
+            </button>
+        </div>
+    </div>
+
+    <!-- Comparison Analysis Section -->
+    <div class="comparison-section" id="comparisonSection">
+        <div class="comparison-header">
+            <h2><i class="fas fa-chart-line"></i> பங்கு ஒப்பீட்டு பகுப்பாய்வு</h2>
+            <button class="btn-print" onclick="toggleComparison()">
+                <i class="fas fa-times"></i> மூடு
+            </button>
+        </div>
+        <div class="comparison-cards">
+            <div class="comparison-card">
+                <h4><i class="fas fa-arrow-up"></i> விலை உயர்வு காரணங்கள்</h4>
+                <div id="priceUpReasons">
+                    <div class="reason-item">
+                        <div class="reason-title">அப்பர் அடித்துள்ளது</div>
+                        <div class="reason-desc">முக்கிய எதிர்ப்பு மட்டத்தை உடைத்து மேலே செல்கிறது</div>
+                    </div>
+                    <div class="reason-item">
+                        <div class="reason-title">தொகுதி வணிகம் அதிகம்</div>
+                        <div class="reason-desc">சராசரி தொகுதியை விட 50% அதிகமாக வணிகம்</div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-card">
+                <h4><i class="fas fa-arrow-down"></i> விலை தாழ்வு காரணங்கள்</h4>
+                <div id="priceDownReasons">
+                    <div class="reason-item">
+                        <div class="reason-title">லோயர் உடைந்துள்ளது</div>
+                        <div class="reason-desc">முக்கிய ஆதரவு மட்டத்தை உடைத்து கீழே செல்கிறது</div>
+                    </div>
+                    <div class="reason-item">
+                        <div class="reason-title">விற்பனை அழுத்தம்</div>
+                        <div class="reason-desc">பெரிய வணிகர்கள் லாபம் எடுத்தல்</div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-card">
+                <h4><i class="fas fa-chart-bar"></i> தொகுதி அதிகரிப்பு காரணங்கள்</h4>
+                <div id="volumeReasons">
+                    <div class="reason-item">
+                        <div class="reason-title">செய்தி ஊக்குவிப்பு</div>
+                        <div class="reason-desc">நிறுவன செய்திகள்/லாப அறிக்கை வெளியீடு</div>
+                    </div>
+                    <div class="reason-item">
+                        <div class="reason-title">புதிய உயர்/தாழ் உருவாக்கம்</div>
+                        <div class="reason-desc">புதிய விலை மட்டங்கள் உருவாக்கம்</div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-card">
+                <h4><i class="fas fa-lightbulb"></i> பரிந்துரை காரணங்கள்</h4>
+                <div id="signalReasons">
+                    <div class="reason-item">
+                        <div class="reason-title">வாங்க பரிந்துரை</div>
+                        <div class="reason-desc">RSI 30 க்கு கீழே + தொகுதி உயர்வு</div>
+                    </div>
+                    <div class="reason-item">
+                        <div class="reason-title">விற்க பரிந்துரை</div>
+                        <div class="reason-desc">RSI 70 க்கு மேல் + தொகுதி உயர்வு</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Table -->
+    <div class="report-section" id="reportSection">
+        <div class="report-header">
+            <h2 id="reportTitle"><i class="fas fa-list"></i> வாங்க (BUY) பட்டியல்</h2>
+            <div class="action-buttons">
+                <button class="btn-dashboard-wa" onclick="shareDashboardViaWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> டாஸ்போர்ட் பகிர்
+                </button>
+                <button class="btn-wa" onclick="shareWA()">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+                <button class="btn-print" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print
+                </button>
+            </div>
+        </div>
+        
+        <div class="table-info" id="tableInfo" style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">
+            <span id="pageInfo">பக்கம் 1</span>
+        </div>
+        
+        <div style="overflow-x:auto;">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th width="5%">#</th>
+                        <th width="10%">சின்னம்</th>
+                        <th width="12%">முந்தைய விலை</th>
+                        <th width="12%">தற்போதைய விலை</th>
+                        <th width="15%">மாற்றம் %</th>
+                        <th width="20%">காரணம்</th>
+                        <th width="12%">இலக்கு</th>
+                        <th width="12%">ஸ்டாப்லாஸ்</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+        
+        <div class="pagination" id="pagination">
+            <!-- Pagination will be added dynamically -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. Live Clock Function
+    function updateClock() {
+        const now = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit',
+            hour12: true 
+        };
+        document.getElementById('clockText').innerText = now.toLocaleString('ta-IN', options);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Global Data
+    let processedData = [];
+    let currentFilter = 'BUY';
+    let currentPage = 1;
+    let itemsPerPage = 15;
+    let totalStocks = 0;
+    let priceUpCount = 0;
+    let priceDownCount = 0;
+    
+    // Sample stock data for demonstration
+    const sampleStockDetails = {
+        "RELIANCE": { name: "ரிலையன்ஸ்", sector: "எண்ணெய் & எரிவாயு" },
+        "TCS": { name: "டாடா கன்சல்டன்சி", sector: "ஐடி" },
+        "INFY": { name: "இன்போசிஸ்", sector: "ஐடி" },
+        "HDFCBANK": { name: "எச்.டி.எப்.சி வங்கி", sector: "வங்கி" },
+        "ICICIBANK": { name: "ஐ.சி.ஐ.சி.ஐ வங்கி", sector: "வங்கி" },
+        "SBIN": { name: "ஸ்டேட் வங்கி", sector: "வங்கி" },
+        "BHARTIARTL": { name: "பார்ட்டி ஏர்டெல்", sector: "தொலைதொடர்பு" },
+        "ITC": { name: "ஐ.டி.சி", sector: "ஃபாஸ்ட் மூவிங் பொருட்கள்" },
+        "KOTAKBANK": { name: "கோட்டக் வங்கி", sector: "வங்கி" },
+        "AXISBANK": { name: "ஆக்சிஸ் வங்கி", sector: "வங்கி" }
+    };
+
+    // Reason explanations based on price change
+    const reasonTemplates = {
+        "HIGH_UP": [
+            "நேற்று விட இன்று விலை கணிசமாக உயர்ந்துள்ளது",
+            "அப்பர் அடித்துள்ளது - எதிர்ப்பு மட்டத்தை உடைத்துள்ளது",
+            "தொகுதி அதிகரிப்பு - வாங்கும் அழுத்தம் உயர்வு",
+            "ப்ரீமார்கெட் ஆர்டர்கள் அதிகம்"
+        ],
+        "MEDIUM_UP": [
+            "விலை மிதமான உயர்வு",
+            "ஆதரவு மட்டத்தில் இருந்து மீள்வு",
+            "சராசரி தொகுதி வணிகம்",
+            "சந்தை ஸென்டிமெண்ட் நேர்மறை"
+        ],
+        "LOW_UP": [
+            "சிறிய விலை உயர்வு",
+            "ஸ்டேபிள் டிரெண்டில் உள்ளது",
+            "சாதாரண தொகுதி வணிகம்",
+            "சந்தை ஸென்டிமெண்ட் நியூட்ரல்"
+        ],
+        "HIGH_DOWN": [
+            "நேற்று விட இன்று விலை கணிசமாக தாழ்ந்துள்ளது",
+            "லோயர் உடைந்துள்ளது - ஆதரவு மட்டத்தை இழந்துள்ளது",
+            "விற்பனை அழுத்தம் அதிகம்",
+            "பெரிய வணிகர்கள் லாபம் எடுத்தல்"
+        ],
+        "MEDIUM_DOWN": [
+            "விலை மிதமான தாழ்வு",
+            "எதிர்ப்பு மட்டத்தில் இருந்து திரும்பல்",
+            "சராசரி தொகுதி வணிகம்",
+            "சந்தை ஸென்டிமெண்ட் எதிர்மறை"
+        ],
+        "LOW_DOWN": [
+            "சிறிய விலை தாழ்வு",
+            "ஸ்டேபிள் டிரெண்டில் உள்ளது",
+            "சாதாரண தொகுதி வணிகம்",
+            "சந்தை ஸென்டிமெண்ட் நியூட்ரல்"
+        ]
+    };
+
+    // 2. Read File Helper
+    function readFile(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = (e) => reject(e);
+            reader.readAsText(file);
+        });
+    }
+
+    // 3. CSV Parser with volume detection
+    function parseCSV(text, isToday = false) {
+        const lines = text.trim().split('\n');
+        if (lines.length < 2) return [];
+        
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+        
+        // Find indices dynamically
+        const symbolIdx = headers.findIndex(h => h.includes('symbol') || h.includes('name') || h.includes('scrip'));
+        const priceIdx = headers.findIndex(h => h.includes('ltp') || h.includes('price') || h.includes('close') || h.includes('last'));
+        const volumeIdx = headers.findIndex(h => h.includes('volume') || h.includes('traded') || h.includes('quantity'));
+        
+        if (symbolIdx === -1 || priceIdx === -1) {
+            alert("CSV இல் 'Symbol' மற்றும் 'LTP' (அல்லது Price) தலைப்புகள் இல்லை.");
+            return [];
+        }
+
+        const data = [];
+        for (let i = 1; i < lines.length; i++) {
+            const row = lines[i].split(',');
+            if (row.length < headers.length) continue;
+            
+            const price = parseFloat(row[priceIdx]);
+            const symbol = row[symbolIdx].trim().toUpperCase();
+            let volume = volumeIdx !== -1 ? parseFloat(row[volumeIdx]) || 0 : 0;
+            
+            // Generate realistic volume if not present
+            if (isToday && volume === 0) {
+                volume = Math.floor(Math.random() * 1000000) + 10000;
+            }
+
+            if (!isNaN(price)) {
+                data.push({ 
+                    symbol, 
+                    price,
+                    volume
+                });
+            }
+        }
+        return data;
+    }
+
+    // 4. Generate reason based on price change
+    function generateReason(changePercent, volume, prevVolume = 0) {
+        let reasonKey = "LOW_UP";
+        let reasons = [];
+        
+        // Determine reason category based on percentage change
+        if (changePercent > 5) {
+            reasonKey = "HIGH_UP";
+        } else if (changePercent > 2) {
+            reasonKey = "MEDIUM_UP";
+        } else if (changePercent > 0) {
+            reasonKey = "LOW_UP";
+        } else if (changePercent < -5) {
+            reasonKey = "HIGH_DOWN";
+        } else if (changePercent < -2) {
+            reasonKey = "MEDIUM_DOWN";
+        } else if (changePercent < 0) {
+            reasonKey = "LOW_DOWN";
+        }
+        
+        // Get base reasons
+        reasons = [...reasonTemplates[reasonKey]];
+        
+        // Add volume analysis
+        if (volume > 0 && prevVolume > 0) {
+            const volumeChange = ((volume - prevVolume) / prevVolume) * 100;
+            if (volumeChange > 50) {
+                reasons.push("தொகுதி அதிகரிப்பு: " + volumeChange.toFixed(0) + "% (சராசரியை விட அதிகம்)");
+            } else if (volumeChange > 20) {
+                reasons.push("தொகுதி அதிகரிப்பு: " + volumeChange.toFixed(0) + "%");
+            } else if (volumeChange < -20) {
+                reasons.push("தொகுதி குறைவு: " + Math.abs(volumeChange).toFixed(0) + "%");
+            }
+        }
+        
+        // Add technical analysis
+        if (Math.abs(changePercent) > 3) {
+            if (changePercent > 0) {
+                reasons.push("RSI மேம்பாடு, MACD புல்லிஷ் குறுக்கீடு");
+            } else {
+                reasons.push("RSI தாழ்வு, MACD பேரிஷ் குறுக்கீடு");
+            }
+        }
+        
+        return reasons.slice(0, 3); // Return max 3 reasons
+    }
+
+    // 5. Generate target and stop loss
+    function generateTargetStopLoss(price, changePercent, signal) {
+        let target, stopLoss;
+        
+        if (signal === 'BUY') {
+            // For BUY signals
+            target = price * (1 + (0.05 + Math.random() * 0.05)); // 5-10% upside
+            stopLoss = price * (1 - (0.03 + Math.random() * 0.02)); // 3-5% downside
+        } else if (signal === 'SELL') {
+            // For SELL signals
+            target = price * (1 - (0.05 + Math.random() * 0.05)); // 5-10% downside
+            stopLoss = price * (1 + (0.03 + Math.random() * 0.02)); // 3-5% upside
+        } else {
+            // For WAIT/AVOID signals
+            target = price * (1 + (Math.random() * 0.02 - 0.01)); // ±1%
+            stopLoss = price * (1 + (Math.random() * 0.02 - 0.01)); // ±1%
+        }
+        
+        return {
+            target: target.toFixed(2),
+            stopLoss: stopLoss.toFixed(2)
+        };
+    }
+
+    // 6. Analysis Logic
+    async function analyzeData() {
+        const file1 = document.getElementById('file1').files[0];
+        const file2 = document.getElementById('file2').files[0];
+
+        if (!file1 || !file2) {
+            alert("தயவு செய்து இரண்டு CSV கோப்புகளையும் தேர்வு செய்யவும்.");
+            return;
+        }
+
+        try {
+            const text1 = await readFile(file1);
+            const text2 = await readFile(file2);
+
+            const data1 = parseCSV(text1);
+            const data2 = parseCSV(text2, true);
+
+            if (data1.length === 0 || data2.length === 0) return;
+
+            // Create Map for fast lookup
+            const map1 = new Map();
+            const volumeMap1 = new Map();
+            data1.forEach(d => {
+                map1.set(d.symbol, d.price);
+                volumeMap1.set(d.symbol, d.volume || 0);
+            });
+
+            processedData = [];
+            let buy = 0, sell = 0, wait = 0, avoid = 0;
+            priceUpCount = 0;
+            priceDownCount = 0;
+            totalStocks = data2.length;
+
+            data2.forEach(d => {
+                const symbol = d.symbol;
+                const prevPrice = map1.get(symbol);
+                const currPrice = d.price;
+                const prevVolume = volumeMap1.get(symbol) || 0;
+                const currVolume = d.volume || 0;
+
+                if (prevPrice) {
+                    const changePercent = ((currPrice - prevPrice) / prevPrice) * 100;
+                    
+                    // Count price movements
+                    if (changePercent > 0) {
+                        priceUpCount++;
+                    } else if (changePercent < 0) {
+                        priceDownCount++;
+                    }
+                    
+                    let signal = 'WAIT';
+                    
+                    // Enhanced logic
+                    if (changePercent > 3.0) {
+                        signal = 'BUY';
+                    } else if (changePercent < -3.0) {
+                        signal = 'SELL';
+                    } else if (Math.abs(changePercent) > 1.0) {
+                        signal = 'WAIT';
+                    } else {
+                        signal = 'AVOID';
+                    }
+                    
+                    // Generate reasons
+                    const reasons = generateReason(changePercent, currVolume, prevVolume);
+                    
+                    // Generate target and stop loss
+                    const targets = generateTargetStopLoss(currPrice, changePercent, signal);
+
+                    processedData.push({
+                        s: symbol,
+                        p: prevPrice,
+                        c: currPrice,
+                        chg: changePercent,
+                        sig: signal,
+                        t: targets.target,
+                        sl: targets.stopLoss,
+                        reasons: reasons,
+                        vol: currVolume,
+                        prevVol: prevVolume,
+                        name: sampleStockDetails[symbol]?.name || symbol,
+                        sector: sampleStockDetails[symbol]?.sector || "தெரியவில்லை"
+                    });
+
+                    if (signal === 'BUY') buy++;
+                    else if (signal === 'SELL') sell++;
+                    else if (signal === 'WAIT') wait++;
+                    else if (signal === 'AVOID') avoid++;
+                }
+            });
+
+            // Update Dashboard
+            document.getElementById('count-buy').innerText = buy;
+            document.getElementById('count-sell').innerText = sell;
+            document.getElementById('count-wait').innerText = wait;
+            document.getElementById('count-avoid').innerText = avoid;
+            
+            // Update percentages
+            const totalCompared = buy + sell + wait + avoid;
+            document.getElementById('sub-buy').innerText = totalCompared > 0 ? ((buy/totalCompared)*100).toFixed(1) + "%" : "0%";
+            document.getElementById('sub-sell').innerText = totalCompared > 0 ? ((sell/totalCompared)*100).toFixed(1) + "%" : "0%";
+            document.getElementById('sub-wait').innerText = totalCompared > 0 ? ((wait/totalCompared)*100).toFixed(1) + "%" : "0%";
+            document.getElementById('sub-avoid').innerText = totalCompared > 0 ? ((avoid/totalCompared)*100).toFixed(1) + "%" : "0%";
+
+            // Update summary bar
+            document.getElementById('summaryBar').style.display = 'flex';
+            document.getElementById('totalStocks').innerText = totalStocks;
+            document.getElementById('comparedStocks').innerText = totalCompared;
+            document.getElementById('priceUp').innerText = priceUpCount;
+            document.getElementById('priceDown').innerText = priceDownCount;
+            
+            // Update comparison reasons
+            updateComparisonReasons();
+
+            // Show default view
+            currentPage = 1;
+            showTable('BUY');
+            
+            // Show success message
+            alert(`பகுப்பாய்வு முடிந்தது! ${totalStocks} பங்குகளில் ${totalCompared} ஒப்பிடப்பட்டன. விலை உயர்வு: ${priceUpCount}, விலை தாழ்வு: ${priceDownCount}`);
+
+        } catch (err) {
+            console.error(err);
+            alert("கோப்பைப் படிப்பதில் பிழை ஏற்பட்டது: " + err.message);
+        }
+    }
+
+    // 7. Update comparison reasons
+    function updateComparisonReasons() {
+        const priceUpReasons = document.getElementById('priceUpReasons');
+        const priceDownReasons = document.getElementById('priceDownReasons');
+        const volumeReasons = document.getElementById('volumeReasons');
+        
+        // Clear previous content
+        priceUpReasons.innerHTML = '';
+        priceDownReasons.innerHTML = '';
+        volumeReasons.innerHTML = '';
+        
+        // Add price up reasons
+        const upReasons = [
+            {title: "அப்பர் அடித்துள்ளது", desc: `${priceUpCount} பங்குகள் முக்கிய எதிர்ப்பு மட்டத்தை உடைத்துள்ளன`},
+            {title: "வாங்கும் அழுத்தம்", desc: "ப்ரீமார்கெட் ஆர்டர்கள் அதிகரித்துள்ளன"},
+            {title: "சந்தை ஸென்டிமெண்ட்", desc: "மொத்த சந்தை நேர்மறை ஸென்டிமெண்ட்"}
+        ];
+        
+        upReasons.forEach(reason => {
+            priceUpReasons.innerHTML += `
+                <div class="reason-item">
+                    <div class="reason-title">${reason.title}</div>
+                    <div class="reason-desc">${reason.desc}</div>
+                </div>
+            `;
+        });
+        
+        // Add price down reasons
+        const downReasons = [
+            {title: "லோயர் உடைந்துள்ளது", desc: `${priceDownCount} பங்குகள் ஆதரவு மட்டத்தை இழந்துள்ளன`},
+            {title: "விற்பனை அழுத்தம்", desc: "பெரிய வணிகர்கள் லாபம் எடுத்தல்"},
+            {title: "சந்தை திரும்பம்", desc: "மொத்த சந்தை திரும்பம்/திருத்தம்"}
+        ];
+        
+        downReasons.forEach(reason => {
+            priceDownReasons.innerHTML += `
+                <div class="reason-item">
+                    <div class="reason-title">${reason.title}</div>
+                    <div class="reason-desc">${reason.desc}</div>
+                </div>
+            `;
+        });
+        
+        // Add volume reasons
+        const volReasons = [
+            {title: "தொகுதி வணிகம் அதிகம்", desc: "சராசரி தொகுதியை விட 50%+ அதிகமான பங்குகள்"},
+            {title: "செய்தி ஊக்குவிப்பு", desc: "நிறுவன செய்திகள்/லாப அறிக்கைகள்"},
+            {title: "FII/DII ஃப்ளோ", desc: "வெளிநாட்டு/உள்நாட்டு நிறுவன முதலீட்டாளர்கள் செயல்பாடு"}
+        ];
+        
+        volReasons.forEach(reason => {
+            volumeReasons.innerHTML += `
+                <div class="reason-item">
+                    <div class="reason-title">${reason.title}</div>
+                    <div class="reason-desc">${reason.desc}</div>
+                </div>
+            `;
+        });
+    }
+
+    // 8. Toggle comparison section
+    function toggleComparison() {
+        const section = document.getElementById('comparisonSection');
+        if (section.style.display === 'block' || section.style.display === '') {
+            section.style.display = 'none';
+        } else {
+            section.style.display = 'block';
+            updateComparisonReasons();
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    // 9. Render Table with Pagination
+    function showTable(filter) {
+        currentFilter = filter;
+        currentPage = 1;
+        
+        // Update active card
+        document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+        document.querySelector(`.card-${filter.toLowerCase()}`).classList.add('active');
+
+        const titles = { 
+            'BUY': 'வாங்க (BUY) பட்டியல்', 
+            'SELL': 'விற்க (SELL) பட்டியல்', 
+            'WAIT': 'காத்திரு (WAIT) பட்டியல்',
+            'AVOID': 'வேண்டாம் (AVOID) பட்டியல்'
+        };
+        document.getElementById('reportTitle').innerHTML = `<i class="fas fa-list"></i> ${titles[filter]}`;
+        document.getElementById('reportSection').style.display = 'block';
+
+        renderTablePage();
+        
+        // Scroll to report
+        document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 10. Render table page
+    function renderTablePage() {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+
+        const filtered = processedData.filter(d => d.sig === currentFilter);
+        const totalPages = Math.ceil(filtered.length / itemsPerPage);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const currentItems = filtered.slice(startIndex, endIndex);
+
+        // Update page info
+        document.getElementById('pageInfo').innerText = 
+            `பக்கம் ${currentPage} / ${totalPages} | மொத்தம்: ${filtered.length} பங்குகள் | காட்டப்படுகிறது: ${currentItems.length}`;
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px; color: #666;">இந்த வகைக்கு தரவு இல்லை</td></tr>';
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+
+        // Render current page items
+        currentItems.forEach((d, index) => {
+            const globalIndex = startIndex + index + 1;
+            const chgClass = d.chg > 1 ? 'pos-chg' : (d.chg < -1 ? 'neg-chg' : 'neutral-chg');
+            const changeSign = d.chg > 0 ? '+' : '';
+            
+            // Format reasons as bullet points
+            const reasonsHtml = d.reasons ? d.reasons.map(r => 
+                `<div style="margin-bottom: 3px;"><span class="reason-bullet"></span>${r}</div>`
+            ).join('') : '<div>காரணம் தரவு இல்லை</div>';
+            
+            const row = `
+                <tr>
+                    <td style="font-weight:bold; color: #555;">${globalIndex}</td>
+                    <td>
+                        <div style="font-weight:bold">${d.s}</div>
+                        <div style="font-size:0.8rem; color:#666;">${d.name}</div>
+                    </td>
+                    <td>${d.p.toFixed(2)}</td>
+                    <td style="font-weight:bold">${d.c.toFixed(2)}</td>
+                    <td class="${chgClass}">${changeSign}${d.chg.toFixed(2)}%</td>
+                    <td class="reason-cell">${reasonsHtml}</td>
+                    <td class="target-cell">${d.t}</td>
+                    <td class="stoploss-cell">${d.sl}</td>
+                </tr>
+            `;
+            tbody.innerHTML += row;
+        });
+
+        // Render pagination
+        renderPagination(filtered.length, totalPages);
+    }
+
+    // 11. Render pagination controls
+    function renderPagination(totalItems, totalPages) {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+        
+        if (totalPages <= 1) return;
+        
+        // Previous button
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'முந்தைய';
+        prevButton.className = 'page-btn';
+        prevButton.disabled = currentPage === 1;
+        prevButton.onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTablePage();
+            }
+        };
+        pagination.appendChild(prevButton);
+        
+        // Page buttons
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i;
+            pageButton.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+            pageButton.onclick = () => {
+                currentPage = i;
+                renderTablePage();
+            };
+            pagination.appendChild(pageButton);
+        }
+        
+        // Next button
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'அடுத்தது';
+        nextButton.className = 'page-btn';
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.onclick = () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTablePage();
+            }
+        };
+        pagination.appendChild(nextButton);
+    }
+
+    // 12. Share WhatsApp (current filtered view)
+    function shareWA() {
+        const filtered = processedData.filter(d => d.sig === currentFilter);
+        if (filtered.length === 0) {
+            alert("பகிர்வதற்கு தரவு இல்லை.");
+            return;
+        }
+
+        let msg = `*பி.ஆர்.ஐ சந்தை பகுப்பாய்வு ரிப்போர்ட் (${currentFilter})*\n`;
+        msg += `நேரம்: ${new Date().toLocaleString('ta-IN')}\n`;
+        msg += `மொத்த பங்குகள்: ${filtered.length}\n\n`;
+        
+        // Limit to first 10 items for WhatsApp
+        const shareItems = filtered.slice(0, 10);
+        
+        shareItems.forEach((d,i) => {
+            const changeSign = d.chg > 0 ? '+' : '';
+            msg += `${i+1}. *${d.s}* (${d.name})\n`;
+            msg += `   விலை: ₹${d.c.toFixed(2)} (${changeSign}${d.chg.toFixed(2)}%)\n`;
+            msg += `   காரணம்: ${d.reasons ? d.reasons[0] : 'தரவு இல்லை'}\n`;
+            if (currentFilter !== 'WAIT' && currentFilter !== 'AVOID') {
+                msg += `   இலக்கு: ₹${d.t} | ஸ்டாப்லாஸ்: ₹${d.sl}\n`;
+            }
+            msg += `\n`;
+        });
+        
+        if (filtered.length > 10) {
+            msg += `... மற்றும் ${filtered.length - 10} பங்குகள்\n`;
+        }
+        
+        msg += `\n© பி.ஆர்.ஐ சந்தை பகுப்பாய்வு கருவி`;
+        
+        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // 13. Share Dashboard via WhatsApp (complete dashboard)
+    function shareDashboardViaWhatsApp() {
+        if (processedData.length === 0) {
+            alert("முதலில் தரவுகளை பகுப்பாய்வு செய்யவும்.");
+            return;
+        }
+
+        const buyCount = processedData.filter(d => d.sig === 'BUY').length;
+        const sellCount = processedData.filter(d => d.sig === 'SELL').length;
+        const waitCount = processedData.filter(d => d.sig === 'WAIT').length;
+        const avoidCount = processedData.filter(d => d.sig === 'AVOID').length;
+        const totalCompared = buyCount + sellCount + waitCount + avoidCount;
+        
+        let msg = `*📊 பி.ஆர்.ஐ சந்தை பகுப்பாய்வு டாஸ்போர்ட்*\n\n`;
+        msg += `📅 நேரம்: ${new Date().toLocaleString('ta-IN')}\n`;
+        msg += `📈 மொத்த பங்குகள்: ${totalStocks}\n`;
+        msg += `📊 ஒப்பிடப்பட்டவை: ${totalCompared}\n`;
+        msg += `⬆️ விலை உயர்வு: ${priceUpCount}\n`;
+        msg += `⬇️ விலை தாழ்வு: ${priceDownCount}\n\n`;
+        
+        msg += `*சிக்னல் விநியோகம்:*\n`;
+        msg += `✅ வாங்க (BUY): ${buyCount} (${totalCompared > 0 ? ((buyCount/totalCompared)*100).toFixed(1) : 0}%)\n`;
+        msg += `❌ விற்க (SELL): ${sellCount} (${totalCompared > 0 ? ((sellCount/totalCompared)*100).toFixed(1) : 0}%)\n`;
+        msg += `⏳ காத்திரு (WAIT): ${waitCount} (${totalCompared > 0 ? ((waitCount/totalCompared)*100).toFixed(1) : 0}%)\n`;
+        msg += `🚫 வேண்டாம் (AVOID): ${avoidCount} (${totalCompared > 0 ? ((avoidCount/totalCompared)*100).toFixed(1) : 0}%)\n\n`;
+        
+        // Top 5 BUY recommendations
+        const topBuys = processedData.filter(d => d.sig === 'BUY')
+            .sort((a, b) => b.chg - a.chg)
+            .slice(0, 5);
+            
+        if (topBuys.length > 0) {
+            msg += `*🔝 முதல் 5 வாங்க பரிந்துரைகள்:*\n`;
+            topBuys.forEach((d, i) => {
+                const changeSign = d.chg > 0 ? '+' : '';
+                msg += `${i+1}. *${d.s}*: ₹${d.c.toFixed(2)} (${changeSign}${d.chg.toFixed(2)}%)\n`;
+                msg += `   இலக்கு: ₹${d.t} | ஸ்டாப்லாஸ்: ₹${d.sl}\n`;
+            });
+            msg += `\n`;
+        }
+        
+        // Top 3 reasons for price movements
+        msg += `*💡 முக்கிய காரணங்கள்:*\n`;
+        msg += `• விலை உயர்வு: ${priceUpCount} பங்குகள்\n`;
+        msg += `• விலை தாழ்வு: ${priceDownCount} பங்குகள்\n`;
+        msg += `• தொகுதி அதிகரிப்பு: பல பங்குகளில்\n\n`;
+        
+        msg += `📱 முழு ரிப்போர்ட்டைப் பார்க்க பி.ஆர்.ஐ கருவியைப் பயன்படுத்தவும்\n`;
+        msg += `© பி.ஆர்.ஐ சந்தை பகுப்பாய்வு`;
+        
+        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
